@@ -1,6 +1,6 @@
-# vasicek
+# Generalized multivariate Vasicek model
 
-Library for the multivariate generalized Vasicek model introduced in [1]:
+Library for the generalized multivariate Vasicek model studied in [1]:
 
 $dr_t = \Theta(b - r_t)dt + \sigma dX_t$,
 
@@ -24,8 +24,8 @@ To simulate data, use the function simulate_interest_rates in simulate.py.
 
 The file demo_simulation.py contains a demo for simulating data with the Vasicek model with fBM noise with parameters given in vasicek_parameters.py.
 
-The file demo_realdata.py contains a demo for using the library with two interest rates.
-The rates are the 3-month Euribor [2] and the Federal Funds effective rate [3] with daily observations from 4.1.1999 to 6.5.2025.
+The file demo_realdata.py contains a demo for using the library with two real interest rates.
+The rates are the 1-month Euribor [2] and the Federal Funds effective rate [3] with daily observations from 4.1.1999 to 6.5.2025.
 
 ## References
 
