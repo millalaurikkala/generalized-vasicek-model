@@ -68,25 +68,5 @@ def main():
 
         plt.savefig("pred_test.png", dpi=300)
 
-        euribor = pd.Series(data["euribor"])
-        dff = pd.Series(data["DFF"])
-        p, q = 1, 1  # You can change these values based on ACF and PACF plots
-        arma_euribor = ARIMA(euribor[:T], order=(p, 0, q)).fit()
-        arma_dff = ARIMA(dff[:T], order=(p, 0, q)).fit()
-
-        predictions_euribor = arma_euribor.predict(start=start, end=T-1)
-        predictions_dff = arma_dff.predict(start=start, end=T-1)
-
-        # compare and calculate metrics
-        rmse_1_ts = np.sqrt(mean_squared_error(euribor[start:], predictions_euribor))
-        rmse_2_ts = np.sqrt(mean_squared_error(dff[start:], predictions_dff))
-        mae_1_ts = mean_absolute_error(euribor[start:], predictions_euribor)
-        mae_2_ts = mean_absolute_error(dff[start:], predictions_dff)
-        print("Time series")
-        print(f"\nRMSE of component 1: {rmse_1_ts}")
-        print(f"RMSE of component 2: {rmse_2_ts}")
-        print(f"MAE of component 1: {mae_1_ts}")
-        print(f"MAE of component 2: {mae_2_ts}")
-
 if __name__=="__main__":
     main()
