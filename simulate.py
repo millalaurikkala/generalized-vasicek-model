@@ -1,7 +1,7 @@
 import numpy as np
-from stochastic.processes.continuous import FractionalBrownianMotion
+from stochastic.processes.continuous import FractionalBrownianMotion, PoissonProcess
 
-def simulate_interest_rates(b, theta, sigma, n: int, T: int, H, dim: int, randseed: int):
+def simulate_interest_rates(b, theta, sigma, n: int, T: int, H, dim: int, randseed: int, process="fbm"):
     """
     Function for simulating interest rate data from the Vasicek model with given parameters and Bm/fBm as noise.
     Inputs:
@@ -9,7 +9,7 @@ def simulate_interest_rates(b, theta, sigma, n: int, T: int, H, dim: int, randse
     theta - mean reversion rate, dim x dim positive definite matrix
     n - number of datapoints
     T - length of time series
-    H - Hurst indices for fBm, array of size dim
+    H - Hurst indices for fBm, array of size dim, or lambdas for Poisson
     dim - dimension of interest rate vector, should correspond to other parameters
     randseed - random seed for simulating fBm
     
@@ -18,9 +18,23 @@ def simulate_interest_rates(b, theta, sigma, n: int, T: int, H, dim: int, randse
     """
     
     X = []
-    for d in range(dim): 
-        f = FractionalBrownianMotion(H[d], T, np.random.default_rng(randseed+d))
-        X.append(f.sample(n-1))
+    for d in range(dim):
+        if process == "fbm":
+            f = FractionalBrownianMotion(H[d], T, np.random.default_rng(randseed+d))
+            X.append(f.sample(n-1))
+        elif process == "poisson":
+            p = PoissonProcess(H[d], np.random.default_rng(randseed+d))
+            X.append(p.sample(n-1, T) - H[d]*np.linspace(0, T, n))
+        elif process == "chi2":
+            f = FractionalBrownianMotion(H[d], T, np.random.default_rng(randseed+d))
+            n_chi2 = 5
+            X.append(sum([f.sample(n-1)**2 for i in range(n_chi2)]) - 1)
+        elif process == "t":
+            f = FractionalBrownianMotion(H[d], T, np.random.default_rng(randseed+d))
+            rng = np.random.default_rng(seed=randseed+d)
+            X.append(f.sample(n-1)/ (np.linalg.norm(rng.normal(size=1000))))
+            
+
     X = np.matrix(X)
 
     dt = 1/n*T
