@@ -23,8 +23,11 @@ def simulate_interest_rates(b, theta, sigma, n: int, T: int, H, dim: int, randse
             f = FractionalBrownianMotion(H[d], T, np.random.default_rng(randseed+d))
             X.append(f.sample(n-1))
         elif process == "poisson":
-            p = PoissonProcess(H[d], np.random.default_rng(randseed+d))
-            X.append(p.sample(n-1, T) - H[d]*np.linspace(0, T, n))
+            rng = np.random.default_rng(seed=randseed+d)
+            p = rng.poisson(H[d], size=n)
+            s = [np.sum(p[0:i]) for i in range(n)]
+            t = np.linspace(0, n, n)
+            X.append(s - H[d]*t)
         elif process == "chi2":
             f = FractionalBrownianMotion(H[d], T, np.random.default_rng(randseed+d))
             n_chi2 = 5

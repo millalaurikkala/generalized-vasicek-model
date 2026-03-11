@@ -229,7 +229,7 @@ class Vasicek:
         except:
             print("Something else went wrong")
             
-    def predict_1step(self, s):
+    def predict_1step(self, s, r_true):
         """
         Do 1-step prediction from time step s (given as index).
         
@@ -239,10 +239,10 @@ class Vasicek:
         Returns:
         prediction as dim x 1 array
         """
-        return self.r[:, s] + self.theta @ (self.b-self.r[:, s])*self.delta_t
+        return r_true[:, s] + self.theta @ (self.b-r_true[:, s])*self.delta_t
             
             
-    def predict(self, start):
+    def predict(self, start, r_new=None):
         """
         Do 1-step predictions from time step start until end of time series.
         Does not extrapolate!
@@ -257,13 +257,20 @@ class Vasicek:
             print("Fit model first.")
             return
         
+        if r_new is None:
+            r_true = self.r
+            N = self.N
+        else:
+            r_true = r_new
+            _, N = np.shape(r_new)
+
         if start > self.N:
             print("Incorrect starting timestep.")
             return
         
-        pred = np.matrix(np.zeros((self.d,self.N - start)))
-        for s in range(start, self.N):
-            pred[:, s-start] = self.predict_1step(s)
+        pred = np.matrix(np.zeros((self.d,N - start)))
+        for s in range(start, N):
+            pred[:, s-start] = self.predict_1step(s, r_true)
             
         return pred
     
