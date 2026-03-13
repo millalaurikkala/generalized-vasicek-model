@@ -24,8 +24,8 @@ def simulate_interest_rates(b, theta, sigma, n: int, T: int, H, dim: int, randse
             X.append(f.sample(n-1))
         elif process == "poisson":
             rng = np.random.default_rng(seed=randseed+d)
-            p = rng.poisson(H[d], size=n)
-            s = [np.sum(p[0:i]) for i in range(n)]
+            p = rng.poisson(H[d], size=n-1)
+            s = np.array([0] + list(np.cumsum(p)))
             t = np.linspace(0, n, n)
             X.append(s - H[d]*t)
         elif process == "chi2":
