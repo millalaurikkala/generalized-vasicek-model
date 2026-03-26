@@ -1,7 +1,7 @@
 ### 3D simulation parameters
 
 * Time series length T = 4000
-* Number of observations n = 10000
+* Number of observations n = 10000 and n = 100 000
 * Dimension d = 3
 * Number of realizations N = 1000
 
