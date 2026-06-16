@@ -35,7 +35,8 @@ def simulate_interest_rates(b, theta, sigma, n: int, T: int, H, dim: int, randse
         elif process == "t":
             f = FractionalBrownianMotion(H[d], T, np.random.default_rng(randseed+d))
             rng = np.random.default_rng(seed=randseed+d)
-            X.append(f.sample(n-1)/ (np.linalg.norm(rng.normal(size=1000))))
+            n_z = 1000
+            X.append(f.sample(n-1)/ (1 / np.sqrt(n_z) * np.linalg.norm(rng.normal(size=n_z))))
             
 
     X = np.matrix(X)
