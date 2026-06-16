@@ -299,3 +299,19 @@ class Vasicek:
         return (increments, noise)
                 
                 
+def predict_vasicek(r, H, T, start, s=10):
+    """
+    Compute 1-step predictions with an expanding window and fit model again after each time step.
+    """
+    d, N = np.shape(r)
+    pred = np.matrix(np.zeros((d,N - start)))
+
+    for t in range(start, N):
+        print(t)
+        model = Vasicek(r[:, :t], H, t/N * T)
+        model.estimate_covariance(s)
+        model.estimate_matrices(s)
+
+        pred[:, t-start] = r[:, t] + model.theta @ (model.b-r[:, t])*model.delta_t
+
+    return pred

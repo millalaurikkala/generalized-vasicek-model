@@ -26,6 +26,7 @@ The file demo_simulation.py contains a demo for simulating data with the Vasicek
 
 The file demo_realdata.py contains a demo for using the library with two real interest rates.
 The rates are the 1-month Euribor [2] and the Federal Funds effective rate [3] with daily observations from 4.1.1999 to 6.5.2025.
+The file estimate_H.py shows how to estimate the Hurst indices of these data as explained in [1].
 
 ## References
 

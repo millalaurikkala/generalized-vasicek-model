@@ -15,7 +15,7 @@
 ### 4D simulation parameters
 
 * Time series length T = 4000
-* Number of observations n = 10000
+* Number of observations n = 10 000 and n = 100 000
 * Dimension d = 4
 * Number of realizations N = 1000
 
