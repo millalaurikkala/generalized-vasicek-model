@@ -1,5 +1,6 @@
 import numpy as np
 from stochastic.processes.continuous import FractionalBrownianMotion, PoissonProcess
+from simulate_t import simulate_t
 
 def simulate_interest_rates(b, theta, sigma, n: int, T: int, H, dim: int, randseed: int, process="fbm"):
     """
@@ -32,11 +33,13 @@ def simulate_interest_rates(b, theta, sigma, n: int, T: int, H, dim: int, randse
             f = FractionalBrownianMotion(H[d], T, np.random.default_rng(randseed+d))
             n_chi2 = 5
             X.append(sum([f.sample(n-1)**2 for i in range(n_chi2)]) - 1)
-        elif process == "t":
+        elif process == "t_old":
             f = FractionalBrownianMotion(H[d], T, np.random.default_rng(randseed+d))
             rng = np.random.default_rng(seed=randseed+d)
             n_z = 1000
             X.append(f.sample(n-1)/ (1 / np.sqrt(n_z) * np.linalg.norm(rng.normal(size=n_z))))
+        elif process == "t":
+            X.append(simulate_t(1, 6, T, n, randseed+d))
             
 
     X = np.matrix(X)
