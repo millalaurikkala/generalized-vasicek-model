@@ -239,7 +239,7 @@ class Vasicek:
         Returns:
         prediction as dim x 1 array
         """
-        return r_true[:, s] + self.theta @ (self.b-r_true[:, s])*self.delta_t
+        return r_true[:, s-1] + self.theta @ (self.b-r_true[:, s-1])*self.delta_t
             
             
     def predict(self, start, r_new=None):
@@ -312,6 +312,6 @@ def predict_vasicek(r, H, T, start, s=10):
         model.estimate_covariance(s)
         model.estimate_matrices(s)
 
-        pred[:, t-start] = r[:, t] + model.theta @ (model.b-r[:, t])*model.delta_t
+        pred[:, t-start] = r[:, t-1] + model.theta @ (model.b-r[:, t-1])*model.delta_t
 
     return pred
